@@ -1,0 +1,18 @@
+#legend {
+    padding: 20px;
+    
+}
+
+h4 {
+    text-align: center;
+}
+
+input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+}
+
+.check-label {
+    
+    padding: 10px 20px;
+}
