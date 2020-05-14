@@ -25,7 +25,6 @@ class Markers extends React.Component {
     }
 
     render() {
-        console.log("inside Markers return");
         return(
             <div>MARKERS</div>
         );

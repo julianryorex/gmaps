@@ -17,7 +17,7 @@ const getCenter = () => {
 
 const MyMapComponent = compose(
 	withProps({
-		googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`,
+		googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyDEZvbIV9rDUxIxtsnsq_xQ5UjnMo0P4-s`,
 		loadingElement: < div style={{ height: `100%` }} />,
 		containerElement: < div style = {{ height: `100%` }} />,
 		mapElement: < div style = {{ height: `100%` }} />
@@ -78,18 +78,14 @@ export default class MapContainer extends React.Component {
 
 	// called every time a checkbox is checked/unchecked
 	async legendChecked(currentLegendState) {
-		console.log("legendChecked called");
 		await this.setState({legend: currentLegendState});
 		const validMarkers = this.markerValidation();
-		console.log(validMarkers);
 		if (validMarkers.success) 
 			await this.setState({ isMarkerShown: true });
 		
 		else 
 			await this.setState({ isMarkerShown: false });
-		
-		
-		console.log(validMarkers.data);
+
 		await console.log("isMarkerShown " + this.state.isMarkerShown)
 	}
 
@@ -103,7 +99,6 @@ export default class MapContainer extends React.Component {
 						onMarkerClick={this.handleMarkerClick}
 					>
 						<Marker position={{ lat: 45.676998, lng: -111.042931 }} />
-						{console.log("INIDE RENDER MAP")}
 					</MyMapComponent>
 				</div>
 			</div>
