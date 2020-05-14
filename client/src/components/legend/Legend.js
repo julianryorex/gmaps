@@ -14,23 +14,25 @@ class Legend extends React.Component {
         this.checked = this.checked.bind(this);
     }
 
-    checked(type) {
+    async checked(type) {
+        // console.log("before");
+        // console.log(this.state);
         switch (type) {
-            case 'firescape':
-                (this.state.firescape === false) ? this.setState({ firescape: true }) : this.setState({ firescape: false });
-                break;
             case 'sites':
-                (this.state.sites === false) ? this.setState({ sites: true }) : this.setState({ sites: false });
+                await (this.state.sites === false) ? this.setState({ sites: true }) : this.setState({ sites: false });
+                break;
+            case 'firescape':
+                await (this.state.firescape === false) ? this.setState({ firescape: true }) : this.setState({ firescape: false });
                 break;
             case 'active_fires':
-                (this.state.active_fires === false) ? this.setState({ active_fires: true }) : this.setState({ active_fires: false });
+                await (this.state.active_fires === false) ? this.setState({ active_fires: true }) : this.setState({ active_fires: false });
                 break;
             default:
                 console.log("default");
                 break;
         }
-        this.props.parentCallback(this.state);
-        console.log(this.state);
+
+        await this.props.parentCallback(this.state);
     }
 
     render() {
@@ -46,7 +48,7 @@ class Legend extends React.Component {
                 <input type="checkbox" id="active-fires" onChange={() => this.checked('active_fires')} />
                 <label className="check-label" forhtml="active-fires">Active Fires</label>
                 <br />
-                <p>*Data is fictional</p>
+                
             </div>
 
         );
@@ -54,23 +56,3 @@ class Legend extends React.Component {
 }
 
 export default Legend;
-
-
-// const Legend = () => {
-
-//     // need to make a legend
-//     var legend = document.createElement('div');
-//     legend.id = 'legend';
-//     var content = [];
-//     content.push('<h3>Butterflies*</h3>');
-//     content.push('<p><div class="color red"></div>Battus</p>');
-//     content.push('<p><div class="color yellow"></div>Speyeria</p>');
-//     content.push('<p><div class="color green"></div>Papilio</p>');
-//     content.push('<p><div class="color blue"></div>Limenitis</p>');
-//     content.push('<p><div class="color purple"></div>Myscelia</p>');
-//     content.push('<p>*Data is fictional</p>');
-//     legend.innerHTML = content.join('');
-//     legend.index = 1;
-//     controlPosition = { google.maps.ControlPosition.TOP_LEFT }
-
-// }
