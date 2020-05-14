@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { GoogleMap, withScriptjs, withGoogleMap, Marker } from "react-google-maps";
+import { GoogleMap, withScriptjs, withGoogleMap } from "react-google-maps";
 import { compose, withProps } from "recompose"
 import Legend from "./components/legend/Legend";
 import Markers from "./components/marker/Markers";
@@ -27,11 +27,13 @@ const MyMapComponent = compose(
 )( (props) =>
 	
 	<GoogleMap
+		// add styling here
 		defaultZoom={8}
 		defaultCenter={{lat: 0, lng: 0 }}
 		center={getCenter()}
 	>
-		 {props.isMarkerShown && <Markers />}
+		{console.log(props)}
+		 {props.isMarkerShown && <Markers data={props} />}
 	</GoogleMap>
 );
 
@@ -44,7 +46,8 @@ export default class MapContainer extends React.Component {
 		super(props);
 		this.state = {
 			legend: null, 
-			isMarkerShown: false
+			isMarkerShown: false,
+			markerArray: []
 		};
 
 		// function bindings
@@ -80,8 +83,11 @@ export default class MapContainer extends React.Component {
 	async legendChecked(currentLegendState) {
 		await this.setState({legend: currentLegendState});
 		const validMarkers = this.markerValidation();
-		if (validMarkers.success) 
-			await this.setState({ isMarkerShown: true });
+		if (validMarkers.success) {
+			await this.setState({ isMarkerShown: true, markerArray: validMarkers.data });
+			console.log("inside legendCheck");
+			console.log(this.state);
+		}
 		
 		else 
 			await this.setState({ isMarkerShown: false });
@@ -90,6 +96,7 @@ export default class MapContainer extends React.Component {
 	}
 
 	render() {
+		console.log(this.state);
 		return (
 			<div id='master'>
 				<Legend parentCallback={this.legendChecked} />
@@ -97,8 +104,9 @@ export default class MapContainer extends React.Component {
 					<MyMapComponent
 						isMarkerShown={this.state.isMarkerShown}
 						onMarkerClick={this.handleMarkerClick}
+						{... this.state}
 					>
-						<Marker position={{ lat: 45.676998, lng: -111.042931 }} />
+						
 					</MyMapComponent>
 				</div>
 			</div>

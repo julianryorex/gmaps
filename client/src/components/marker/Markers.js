@@ -1,6 +1,8 @@
 import React from 'react';
-import { Marker } from "react-google-maps"
+// import { Marker } from "react-google-maps"
 import SITES from '../../assets/sites.json';
+
+// i wanna know what marker I wanna show. To know this, there is an array that is passed 
 
 
 class Markers extends React.Component {
@@ -9,10 +11,11 @@ class Markers extends React.Component {
         super(props);
         this.state = {
             legendInfo: props.data,
-            markers: []
+            markers: props.data.markerArray
         };
-        console.log("Inside Markers:");
-        console.log(props);
+        console.log("Inside Markers.js:");
+        console.log(this.props);
+        console.log(this.state);
         this.getMarkers();
     }
 
