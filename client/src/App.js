@@ -32,7 +32,6 @@ const MyMapComponent = compose(
 		defaultCenter={{lat: 0, lng: 0 }}
 		center={getCenter()}
 	>
-		{console.log(props)}
 		 {props.isMarkerShown && <Markers data={props} />}
 	</GoogleMap>
 );
@@ -85,8 +84,6 @@ export default class MapContainer extends React.Component {
 		const validMarkers = this.markerValidation();
 		if (validMarkers.success) {
 			await this.setState({ isMarkerShown: true, markerArray: validMarkers.data });
-			console.log("inside legendCheck");
-			console.log(this.state);
 		}
 		
 		else 
@@ -96,7 +93,6 @@ export default class MapContainer extends React.Component {
 	}
 
 	render() {
-		console.log(this.state);
 		return (
 			<div id='master'>
 				<Legend parentCallback={this.legendChecked} />
