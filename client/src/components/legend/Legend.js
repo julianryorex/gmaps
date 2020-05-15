@@ -1,5 +1,4 @@
 import React from 'react';
-// import { GoogleMap, withScriptjs, withGoogleMap } from "react-google-maps"
 import './legend.css'
 
 
@@ -15,8 +14,6 @@ class Legend extends React.Component {
     }
 
     async checked(type) {
-        // console.log("before");
-        // console.log(this.state);
         switch (type) {
             case 'sites':
                 await (this.state.sites === false) ? this.setState({ sites: true }) : this.setState({ sites: false });

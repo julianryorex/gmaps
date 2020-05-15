@@ -3,8 +3,6 @@ import SITES from '../../assets/sites.json';
 import { Marker, InfoWindow } from 'react-google-maps';
 import './markers.css';
 
-// i wanna know what marker I wanna show. To know this, there is an array that is passed 
-
 
 class Markers extends React.Component {
 
@@ -15,21 +13,47 @@ class Markers extends React.Component {
             markers: props.data.markerArray,
             selectedMarker: null
         };
-        console.log("Inside Markers.js:");
-        console.log(this.props);
-        console.log(this.state);
-        // this.getMarkers(); // move this to render
     }
-
+    
+    /**
+     * @author Julian
+     * This is the place to experiment with the fetch. To see if the fetch works, 
+     * check the browser console (F12) to see the various logs. 
+     * If successful, 'Fetched Data' + the data will show in the logs
+     * If unsuccessful, "ERROR HAS OCCURED" will show up in the log as an error message.
+     * This can mean many things: 
+     * - CORS is not enabled
+     * - problem connecting to server
+     * - connection successful but parsing problem (I can fix this problem)
+     * - Other connection issues.
+     * 
+     * Currently, It is hardcoded so that all checkboxes will return the JSON file data. 
+     * This can be changed on line 56 of this file.
+     */
     getMarkers() {
-        // const currentMarkers = this.state.markers;
-    //    currentMarkers.forEach((marker) => {
-    //        switch(marker) {
-    //            case 'sites':
-    //                fetch ....
-    //        }
-    //    });
-        const sites = SITES; // temp
+        const currentMarkers = this.state.markers;
+        currentMarkers.forEach((marker) => {
+           switch(marker) {
+               case 'sites':
+                   console.log("inside switch sites");
+                   fetch('http://epiic-fa01-prod.azurewebsites.net/api/sites')
+                   .then(response => response.json())
+                   .then(data => {
+                       console.log("Fetched data:");
+                       console.log(data);
+                   })
+                   .catch(e => {
+                       console.error("ERROR HAS OCCURED");
+                       console.error(e);
+                   });
+                   break;
+
+                default:
+                    console.log("default case");
+            }
+        });
+
+        const sites = SITES; // temp option to parse JSON file
         return this.getSites(sites); 
     }
 
@@ -38,7 +62,7 @@ class Markers extends React.Component {
         const newList = sites.map( site => 
             
             <Marker 
-                key={site.amphoraid || site.id} // might change later
+                key={site.amphoraid || site.id} // might change later if ID problems occur
                 position={{
                     lat: parseFloat(site.latitude),
                     lng: parseFloat(site.longitude)
@@ -50,20 +74,13 @@ class Markers extends React.Component {
                 }}
             />
         );
-
-        console.log(newList);
         return newList;
         
     }
 
 
     render() {
-        const markerData = this.getMarkers(); // move this to render
-        console.log(typeof markerData);
-        if(this.state.selectedMarker) {
-            console.log(this.state.selectedMarker);
-            console.log(this.state.selectedMarker);
-        }
+        const markerData = this.getMarkers();
         return(
             <>
             { markerData }
@@ -90,11 +107,6 @@ class Markers extends React.Component {
                     Lat: {this.state.selectedMarker.latitude}&nbsp;&nbsp;
                     Lng: {this.state.selectedMarker.longitude}
                     <br />
-
-
-                        
-                   
-                
                 </div>
             </InfoWindow>
             )}       

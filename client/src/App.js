@@ -89,7 +89,7 @@ export default class MapContainer extends React.Component {
 		else 
 			await this.setState({ isMarkerShown: false });
 
-		await console.log("isMarkerShown " + this.state.isMarkerShown)
+		// await console.log("isMarkerShown " + this.state.isMarkerShown)
 	}
 
 	render() {
