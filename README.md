@@ -1,5 +1,7 @@
 # How to Run this Prototype
 
+Building a redesigned prototype of [this web application](http://climatescape.net/)
+
 ## Double Check if Necessary Tools are Installed
 
 In order to run this prototype, a few things must be installed.
