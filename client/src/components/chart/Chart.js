@@ -1,82 +1,85 @@
 import React, { Component } from 'react';
 import * as JSC from "jscharting";
-import Skeleton from "@yisheng90/react-loading";
 import './chart.css';
 
 
 export default class Chart extends Component {
+    
     constructor(props) {
         super(props);
-        this.state = { loading: true };
+
+        this.renderChart = this.renderChart.bind(this);
 
     }
 
     componentDidMount() {
-        let thisChart = this;
-
-        fetch('https://raw.githubusercontent.com/julianryorex/EPIIC-Project/master/docs/assets/ee-chart.csv')
-
-            .then(function (response) {
-                return response.text();
-            })
-            .then(function (text) {
-                let series = csvToSeries(text);
-
-                thisChart.setState({ loading: false });
-                renderChart(series);
-
+        fetch('./assets/sensordata.json')
+            .then(response => response.json())
+            .then(data => {
+                data = this.formatData(data);
+                this.renderChart(data);
             })
             .catch(function (error) {
-                console.log(error);
+                console.error(error);
             });
-
-
-        function csvToSeries(text) {
-            const date = "system:time_start";
-            let dataAsJson = JSC.csv2Json(text);
-            let dataPoints = [];
-            dataAsJson.forEach(function (row) {
-                const newDate = new Date(row[date]);
-                const d = newDate.getDate();
-                const month = newDate.getMonth();
-                const adjMonth = month + 1;
-                const year = newDate.getFullYear();
-                const dateStr = adjMonth + "/" + d + "/" + year;
-                dataPoints.push({ x: dateStr, y: row.NDVI });
-            });
-            return [
-                { name: 'NDVI', points: dataPoints }
-            ];
-        }
-
-        function renderChart(series) {
-            JSC.Chart('chart', {
-                type: 'line',
-                title: {
-                    label: {
-                        text: 'Time Series Data',
-                        style_fontSize: 16
-                    },
-                    position: 'center'
-                },
-                legend_visible: false,
-                yAxis: {
-                    label_text: 'Normalized Difference Vegetation Index'
-                },
-                xAxis: {
-                    label_text: 'Collected Date',
-                    scale: {
-                        type: 'time',
-                        interval: { unit: 'year' },
-                        range_padding: 0
-                    }
-                },
-                xAxis_crosshair_enabled: true,
-                defaultPoint_tooltip: 'NDVI: <b>%yValue</b>',
-                series: series
-            });
-        }
     }
+
+    formatData(data) {
+        console.log("formatting data");
+        console.log(data);
+        let dataPoints = [];
+        data.forEach(dataObj => dataPoints.push( { x: dataObj.t, y: dataObj.value } ));
+
+        return [ { name: "Water Quantity", points: dataPoints } ];
+    }
+
+    renderChart(series) {
+        console.log("series");
+        console.log(series);
+        JSC.Chart('chart', {
+            type: 'line',
+            title: {
+                label: {
+                    text: 'Time Series Data',
+                    style_fontSize: 16
+                },
+                position: 'center'
+            },
+            legend_visible: false,
+            yAxis: {
+                label_text: 'Water Quantity'
+            },
+            xAxis: {
+                label_text: 'Day',
+                defaultMinorTick: {
+                    label_style_fontWeight: 'normal',
+                    gridLine_color: ['crimson', 0.2]
+                },
+                defaultTick: {
+                    label_style_fontWeight: 'bold',
+                    gridLine_color: ['crimson', 0.4]
+                },
+                // formatString: 'MMM-dd',
+                scale: {
+                    type: 'time',
+                    interval: { 
+                        unit: 'day',
+                        multiplier: 3 
+                    },
+                    minorInterval: {
+                        unit: 'day',
+                        multiplier: 1
+                    },
+
+                    range_padding: 0
+                }
+            },
+            xAxis_crosshair_enabled: true,
+            defaultPoint_tooltip: `Quantity: <b>%yValue</b><br>`,
+            series: series
+        });
+    }
+    
 
     render() {
         return (
