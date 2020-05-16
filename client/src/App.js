@@ -4,6 +4,7 @@ import { GoogleMap, withScriptjs, withGoogleMap } from "react-google-maps";
 import { compose, withProps } from "recompose"
 import Legend from "./components/legend/Legend";
 import Markers from "./components/marker/Markers";
+import Overlay from "./components/overlay/Overlay";
 
 // helper function
 const getCenter = () => {
@@ -32,7 +33,9 @@ const MyMapComponent = compose(
 		defaultCenter={{lat: 0, lng: 0 }}
 		center={getCenter()}
 	>
+		{console.log(props)}
 		 {props.isMarkerShown && <Markers data={props} />}
+		 {props.overlayShown && <Overlay data={props} />}
 	</GoogleMap>
 );
 
@@ -46,7 +49,8 @@ export default class MapContainer extends React.Component {
 		this.state = {
 			legend: null, 
 			isMarkerShown: false,
-			markerArray: []
+			markerArray: [],
+			overlayShown: false
 		};
 
 		// function bindings
@@ -75,21 +79,25 @@ export default class MapContainer extends React.Component {
 			data.success = true;
 			data.data.push('firescape');
 		}
+		
 		return data;
 	}
 
 	// called every time a checkbox is checked/unchecked
 	async legendChecked(currentLegendState) {
+
+		if(currentLegendState.overlay === true)
+			await this.setState({ overlayShown: true} );
+		else
+			await this.setState({ overlayShown: false });
+
 		await this.setState({legend: currentLegendState});
 		const validMarkers = this.markerValidation();
-		if (validMarkers.success) {
-			await this.setState({ isMarkerShown: true, markerArray: validMarkers.data });
-		}
 		
+		if (validMarkers.success) 
+			await this.setState({ isMarkerShown: true, markerArray: validMarkers.data });
 		else 
 			await this.setState({ isMarkerShown: false });
-
-		// await console.log("isMarkerShown " + this.state.isMarkerShown)
 	}
 
 	render() {
@@ -100,6 +108,7 @@ export default class MapContainer extends React.Component {
 					<MyMapComponent
 						isMarkerShown={this.state.isMarkerShown}
 						onMarkerClick={this.handleMarkerClick}
+						overlayShown={this.state.overlayShown}
 						{... this.state}
 					>
 						

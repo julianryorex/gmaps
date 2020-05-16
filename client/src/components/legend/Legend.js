@@ -8,7 +8,8 @@ class Legend extends React.Component {
         this.state = {
             sites: false,
             firescape: false,
-            active_fires: false
+            active_fires: false,
+            overlay: false
         };
         this.checked = this.checked.bind(this);
     }
@@ -23,6 +24,9 @@ class Legend extends React.Component {
                 break;
             case 'active_fires':
                 await (this.state.active_fires === false) ? this.setState({ active_fires: true }) : this.setState({ active_fires: false });
+                break;
+            case 'overlay':
+                await (this.state.overlay === false) ? this.setState({ overlay: true }) : this.setState({ overlay: false });
                 break;
             default:
                 console.log("default");
@@ -44,6 +48,9 @@ class Legend extends React.Component {
                 <br />
                 <input type="checkbox" id="active-fires" onChange={() => this.checked('active_fires')} />
                 <label className="check-label" forhtml="active-fires">Active Fires</label>
+                <br />
+                <input type="checkbox" id="overlay" onChange={() => this.checked('overlay')} />
+                <label className="check-label" forhtml="overlay">Overlay</label>
                 <br />
                 
             </div>

@@ -34,7 +34,7 @@ class Markers extends React.Component {
      * This can be changed on line 56 of this file.
      */
     getMarkers() {
-        const currentMarkers = this.state.markers;
+        // const currentMarkers = this.state.markers;
         // currentMarkers.forEach((marker) => {
         //    switch(marker) {
         //        case 'sites':
